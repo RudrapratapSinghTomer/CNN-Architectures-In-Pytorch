@@ -26,7 +26,11 @@ All models are trained and tested on the [CIFAR-10 Dataset](https://www.cs.toron
 
 - **LeNet-5 Guide**: [The Architecture of LeNet-5](https://www.analyticsvidhya.com) (Analytics Vidhya).
 
-- **AlexNet Guide**: [Dive into Deep Learning] (https://d2l.ai/chapter_convolutional-modern/alexnet.html)
+- **AlexNet Guide**: [Dive into Deep Learning](https://d2l.ai/chapter_convolutional-modern/alexnet.html)
+
+- **VGGNet *Weight Layer 13* (Original Paper)**: [VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION](https://arxiv.org/pdf/1409.1556) by Karen Simonyan ∗ & Andrew Zisserman
+
+- **VGGNet Guide**: [VGG-Net Architecture Explained](https://medium.com/@siddheshb008/vgg-net-architecture-explained-71179310050f), [Understand the Impact of Learning Rate on Neural Network Performance](https://machinelearningmastery.com/understand-the-dynamics-of-learning-rate-on-deep-learning-neural-networks/)
 
 - **Pytorch Guide**: Pytorch Documentation (https://docs.pytorch.org/docs/stable/torch.html),
 
@@ -39,8 +43,9 @@ All models are trained and tested on the [CIFAR-10 Dataset](https://www.cs.toron
 pip install -r requirements.txt
 
 3. Run training
-python main, LeNet - 5.py --model LeNet_
 python main, NNP.py --model NNP_
+python main, LeNet - 5.py --model LeNet_
+python main, VGG.py -- model VGG_
 
 4. Performance Comparison
 Comparison table will be updated as new models are implemented.

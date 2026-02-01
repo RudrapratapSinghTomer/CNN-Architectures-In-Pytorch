@@ -8,7 +8,7 @@ from torchvision import datasets, transforms
 class AlexNet_(nn.Module):
     def __init__(self):
         super().__init__()
-        conv1 = nn.Conv2d(1, 96, 11, stride=4)
+        conv1 = nn.Conv2d(3, 96, 11, stride=4, padding=1)
         conv2 = nn.Conv2d(96, 256, 5, padding=2)
         conv3 = nn.Conv2d(256, 384, 3, padding=1)
         conv4 = nn.Conv2d(384, 384, 3, padding=1)

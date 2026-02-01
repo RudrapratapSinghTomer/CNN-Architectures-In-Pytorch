@@ -8,11 +8,11 @@ from torchvision import datasets, transforms
 class LeNet_(nn.Module):
     def __init__(self):
         super().__init__()
-        conv1 = nn.Conv2d(1, 6, 5)
-        conv2 = nn.Conv2d(6, 16, 5)
-        fc1 = nn.Linear(16*4*4,120)
-        fc2 = nn.Linear(120,84)
-        fc3 = nn.Linear(84,10)
+        conv1 = nn.Conv2d(1, 6, 5, padding=1)
+        conv2 = nn.Conv2d(6, 16, 5, padding=1)
+        fc1 = nn.Linear(16*4*4,120, padding=1)
+        fc2 = nn.Linear(120,84, padding=1)
+        fc3 = nn.Linear(84,10, padding=1)
 
     def forward_pass(self, x):
         x = F.relu(self.conv1(x))
@@ -79,8 +79,8 @@ for epoch in range(5):
 
 model.eval()
 
-correct = 0
-total = 0
+corrects = 0
+totals = 0
 
 with torch.no_grad():
     for images, labels in test_dataloader:
@@ -92,4 +92,4 @@ with torch.no_grad():
         correct += (y_pred == labels).sum().item()
         total += labels.size(0)
 
-print("Test Accuracy:", correct / total)
+print("Test Accuracy:", corrects / totals)
