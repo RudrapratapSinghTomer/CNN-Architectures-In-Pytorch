@@ -32,7 +32,7 @@ All models are trained and tested on the [CIFAR-10 Dataset](https://www.cs.toron
 
 - **VGGNet Guide**: [VGG-Net Architecture Explained](https://medium.com/@siddheshb008/vgg-net-architecture-explained-71179310050f), [Understand the Impact of Learning Rate on Neural Network Performance](https://machinelearningmastery.com/understand-the-dynamics-of-learning-rate-on-deep-learning-neural-networks/)
 
-- **Pytorch Guide**: Pytorch Documentation (https://docs.pytorch.org/docs/stable/torch.html),
+- **Pytorch Guide**: [Pytorch Documentation](https://docs.pytorch.org/docs/stable/torch.html),
 
 ## 🛠️ Getting Started
 1. Clone the repository:
