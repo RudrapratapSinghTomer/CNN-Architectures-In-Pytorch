@@ -93,6 +93,8 @@ for epoch in range(74):
 
     for images, lables in train_dataloader:
         images, labels = images.to(device), labels.to(device)
+        
+        optimizer.zero_grad()
         output = model(images)
         loss = loss_fn(output, lables)
 

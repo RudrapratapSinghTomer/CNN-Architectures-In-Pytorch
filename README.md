@@ -32,6 +32,8 @@ All models are trained and tested on the [CIFAR-10 Dataset](https://www.cs.toron
 
 - **VGGNet Guide**: [VGG-Net Architecture Explained](https://medium.com/@siddheshb008/vgg-net-architecture-explained-71179310050f), [Understand the Impact of Learning Rate on Neural Network Performance](https://machinelearningmastery.com/understand-the-dynamics-of-learning-rate-on-deep-learning-neural-networks/)
 
+- **LeNet-5 (Original Paper)**: [Going Deeper with Convolutions](https://www.cs.unc.edu/~wliu/papers/GoogLeNet.pdf), [GoogLeNet](https://huggingface.co/learn/computer-vision-course/en/unit2/cnns/googlenet)
+
 - **Pytorch Guide**: [Pytorch Documentation](https://docs.pytorch.org/docs/stable/torch.html),
 
 ## 🛠️ Getting Started
