@@ -8,12 +8,16 @@ from torchvision import transforms, datasets
 class GoogleNet_(nn.Module):
     def __init__():
         super().__init__()
+
         pass
 
     def forward_pass(self, x):
         pass
 
-transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))])
+transform = transforms.Compose([transforms.Resize((224,224)), 
+                                transforms.RandomHorizontalFlip(), 
+                                    transforms.ToTensor(), 
+                                        transforms.Normalize((0.5,), (0.5,))])
 
 train_dataset = datasets.CIFAR10(root='./path', train=True, transform=transform, download=True)
 test_dataset = datasets.CIFAR10(root='./path' , train=False, transform=transform, download=True)
