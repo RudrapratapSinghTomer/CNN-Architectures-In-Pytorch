@@ -7,7 +7,7 @@ from torchvision import datasets, transforms
 
 class VGG_(nn.Module):
     def __init__(self):
-        super().__init__()
+        super(VGG_).__init__()
         conv11 = nn.Conv2d(3, 64, 3, padding=1, stride=1)
         conv12 = nn.Conv2d(64, 64, 3, padding=1, stride=1)
 
