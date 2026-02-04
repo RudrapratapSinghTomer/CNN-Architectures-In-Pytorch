@@ -7,3 +7,8 @@ check_gpu.py
 # Ignore system files that might appear
 .DS_Store
 Thumbs.db
+
+#ignore cifar dataset path
+path 
+
+settings.json

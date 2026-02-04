@@ -79,9 +79,10 @@ train_dataloader = DataLoader(train_dataset, batch_size=256, shuffle=True)
 
 test_dataloader = DataLoader(test_dataset, batch_size=256, shuffle=False)
 
-device = torch.device(f'CUDA' if torch.cuda.is_available else 'CPU')
+device = torch.device(f'cuda' if torch.cuda.is_available else 'cpu')
 
 model = VGG_()
+model.to(device)
 optimizer = optim.SGD(model.get_parameter, lr=0.01, momentum=0.9, weight_decay=0.0005)
 loss_fn = nn.CrossEntropyLoss()
 

@@ -40,7 +40,7 @@ train_dataloader = DataLoader(train_dataset, 1000, batch_size=64, shuffle=True)
 
 test_dataloader = DataLoader(test_dataset, 1000, batch_size=64, shuffle=False)
 
-device = torch.device(f'CUDA' if torch.cuda.is_available() else 'CPU')
+device = torch.device(f'cuda' if torch.cuda.is_available() else 'cpu')
 
 model = NNP_().to(device)
 loss_fn = nn.CrossEntropyLoss()

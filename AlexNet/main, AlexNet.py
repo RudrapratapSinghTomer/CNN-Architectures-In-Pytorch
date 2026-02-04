@@ -50,7 +50,7 @@ train_dataset = datasets.CIFAR10(root='./data', train=False, transform=transform
 test_dataloader = DataLoader(test_dataset, 1000, batch_size=64, shuffle=True)
 train_dataloader = DataLoader(train_dataset, 1000, batch_size=64, shuffle=False)
 
-device = torch.device(f'CUDA' if torch.cuda.is_available() else 'CPU')
+device = torch.device(f'cuda' if torch.cuda.is_available() else 'cpu')
 
 model = AlexNet_().to(device)
 loss_fn = nn.CrossEntropyLoss()
