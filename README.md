@@ -10,8 +10,8 @@ The project explores the evolution of CNNs—from early models like LeNet-5 to a
 - [x] **LeNet-5**: The pioneer of CNNs, originally designed for handwritten digit recognition.
 - [ ] **AlexNet**: The model that popularized deep learning in 2012. (Upcoming)
 - [ ] **VGGNet**: Exploration of depth using small $3 \times 3$ filters. (Upcoming)
-- [ ] **ResNet**: Utilizing skip connections to train ultra-deep networks. (Upcoming)
 - [ ] **InceptionNet**: Multi-scale feature extraction through inception modules. (Upcoming)
+- [ ] **ResNet**: Utilizing skip connections to train ultra-deep networks. (Upcoming)
 - [ ] **MobileNet**: Lightweight convolutions for mobile devices. (Upcoming)
 - [ ] **ShuffleNet**: Channel shuffling for efficient computation. (Upcoming)
 - [ ] **EfficientNet**: Systematic scaling of depth, width, and resolution. (Upcoming)
@@ -32,7 +32,13 @@ All models are trained and tested on the [CIFAR-10 Dataset](https://www.cs.toron
 
 - **VGGNet Guide**: [VGG-Net Architecture Explained](https://medium.com/@siddheshb008/vgg-net-architecture-explained-71179310050f), [Understand the Impact of Learning Rate on Neural Network Performance](https://machinelearningmastery.com/understand-the-dynamics-of-learning-rate-on-deep-learning-neural-networks/)
 
-- **GoogleNet (Original Paper)**: [Going Deeper with Convolutions](https://www.cs.unc.edu/~wliu/papers/GoogLeNet.pdf), [GoogLeNet](https://huggingface.co/learn/computer-vision-course/en/unit2/cnns/googlenet)
+- **GoogleNet (Original Paper)**: [Going Deeper with Convolutions](https://www.cs.unc.edu/~wliu/papers/GoogLeNet.pdf)
+
+- **GoogleNet Guide**: [GoogLeNet](https://huggingface.co/learn/computer-vision-course/en/unit2/cnns/googlenet), [GoogLeNet: A Deep Dive into Google’s Neural Network Technology](https://medium.com/@siddheshb008/googlenet-a-deep-dive-into-googles-neural-network-technology-f588d1b49e55)
+
+- **Residual Net (Original Paper)**: [Deep Residual Learning for Image Recognition](https://arxiv.org/pdf/1512.03385)
+
+- **ResNet Guide**: [Wikipedia, Residual neural network](https://en.wikipedia.org/wiki/Residual_neural_network), []()
 
 - **Pytorch Guide**: [Pytorch Documentation](https://docs.pytorch.org/docs/stable/torch.html),
 
