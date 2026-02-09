@@ -38,7 +38,7 @@ All models are trained and tested on the [CIFAR-10 Dataset](https://www.cs.toron
 
 - **Residual Net (Original Paper)**: [Deep Residual Learning for Image Recognition](https://arxiv.org/pdf/1512.03385)
 
-- **ResNet Guide**: [Wikipedia, Residual neural network](https://en.wikipedia.org/wiki/Residual_neural_network), []()
+- **ResNet Guide18**: [Implementing ResNet18 in PyTorch from Scratch](https://debuggercafe.com/implementing-resnet18-in-pytorch-from-scratch/), [Wikipedia, Residual neural network](https://en.wikipedia.org/wiki/Residual_neural_network)
 
 - **Pytorch Guide**: [Pytorch Documentation](https://docs.pytorch.org/docs/stable/torch.html),
 
