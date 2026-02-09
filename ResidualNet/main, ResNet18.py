@@ -5,29 +5,22 @@ import torch.functional as F
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 
-class Convlayer(nn.Module):
+class BasicBlock(nn.Module):
     def __init__(self, in_channel, out_channel, kernel_size, stride, padding):
-        super().__init__()
+        super(BasicBlock, self).__init__()
         self.conv = nn.Conv2d(in_channel, out_channel, kernel_size, stride, padding)
         self.bnorm = nn.BatchNorm2d(out_channel)
 
     def forward(self, x):
         return self.bnorm(self.conv(x))
 
-class shortcut(nn.Module):
-    def __init__(self, x):
-        super().__init__()
-        y = None
-
-        return y+x
-
-    def forward(self,):
-
-        pass
-
 class ResNet_(nn.Module):
     def __init__(self,):
         super(self, ResNet_).__init__()
+
+        pass
+
+    def makelayer(self,):
 
         pass
 
