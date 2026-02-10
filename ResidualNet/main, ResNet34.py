@@ -34,8 +34,8 @@ class BasicBlock(nn.Module):
 class ResNet_(nn.Module):
     def __init__(self, img_size, num_layers, num_channel):
         super(self, ResNet_).__init__()
-        if num_channel==18:
-            layers = [2, 2, 2, 2]
+        if num_channel==34:
+            layers = [3, 4, 6, 3]
             self.expansion = 1
 
         self.in_channels = 64
@@ -127,3 +127,23 @@ for epoch in range():
         correct += (y_pred == labels).sum().item()
 
 model.eval()
+
+correct, total, batch_loss_eval, loss_eval = 0, 0, 0, 0
+
+with torch.no_grad():
+    for images_eval, lables_eval in test_dataloader:
+        images_eval, lables_eval = images_eval.to(device), lables_eval.to(device)
+
+        output = model(images_eval)
+        loss = loss_fn(output, lables_eval)
+
+        batch_loss_eval = loss.item()
+        loss_eval += loss.item()
+
+        y_pred_eval = nn.Softmax(output)
+        y_pred_eval = torch.argmax(output)
+
+        correct_eval += (y_pred_eval == lables).sum().item()
+        total_eval += len(lables)
+
+acc_eval = correct_eval/total_eval
