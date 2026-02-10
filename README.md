@@ -40,6 +40,8 @@ All models are trained and tested on the [CIFAR-10 Dataset](https://www.cs.toron
 
 - **ResNet Guide18**: [Implementing ResNet18 in PyTorch from Scratch](https://debuggercafe.com/implementing-resnet18-in-pytorch-from-scratch/), [Wikipedia, Residual neural network](https://en.wikipedia.org/wiki/Residual_neural_network)
 
+- **ResNet Guide50**: [Building ResNets from Scratch using PyTorch](https://debuggercafe.com/building-resnets-from-scratch-using-pytorch/)
+
 - **Pytorch Guide**: [Pytorch Documentation](https://docs.pytorch.org/docs/stable/torch.html),
 
 ## 🛠️ Getting Started
