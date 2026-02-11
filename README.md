@@ -8,15 +8,15 @@ The project explores the evolution of CNNs—from early models like LeNet-5 to a
 ## 🏗️ Supported Architectures
 - [x] **Neural Network Perceptron (NNP)**: A basic baseline for comparison.
 - [x] **LeNet-5**: The pioneer of CNNs, originally designed for handwritten digit recognition.
-- [ ] **AlexNet**: The model that popularized deep learning in 2012. (Upcoming)
-- [ ] **VGGNet**: Exploration of depth using small $3 \times 3$ filters. (Upcoming)
-- [ ] **InceptionNet**: Multi-scale feature extraction through inception modules. (Upcoming)
-- [ ] **ResNet**: Utilizing skip connections to train ultra-deep networks. (Upcoming)
-- [ ] **MobileNet**: Lightweight convolutions for mobile devices. (Upcoming)
+- [ ] **AlexNet**: The model that popularized deep learning in 2012.
+- [ ] **VGGNet**: Exploration of depth using small $3 \times 3$ filters.
+- [ ] **InceptionNet**: Multi-scale feature extraction through inception modules.
+- [ ] **ResNet**: Utilizing skip connections to train ultra-deep networks.
+- [ ] **MobileNet**: Lightweight convolutions for mobile devices. (In progress)
 - [ ] **ShuffleNet**: Channel shuffling for efficient computation. (Upcoming)
 - [ ] **EfficientNet**: Systematic scaling of depth, width, and resolution. (Upcoming)
 
-NOTE: I main documentation tanh was used as activation funcation for LeNet however in this we are using RelU.
+NOTE: In main documentation tanh was used as activation funcation for LeNet however in this we are using RelU.
 
 ## 📊 Dataset
 All models are trained and tested on the [CIFAR-10 Dataset](https://www.cs.toronto.edu), which consists of 60,000 32 \times 32 colour images in 10 classes.
@@ -42,6 +42,8 @@ All models are trained and tested on the [CIFAR-10 Dataset](https://www.cs.toron
 
 - **ResNet Guide50**: [Building ResNets from Scratch using PyTorch](https://debuggercafe.com/building-resnets-from-scratch-using-pytorch/)
 
+- **Residual Net (Original Paper)**: [MobileNets: Efficient Convolutional Neural Networks for Mobile Vision](https://arxiv.org/pdf/1704.04861), [Searching for MobileNetV3 | Paper Walkthrough & PyTorch Implementation](https://www.youtube.com/watch?v=0oqs-inp7sA&t=37s)
+
 - **Pytorch Guide**: [Pytorch Documentation](https://docs.pytorch.org/docs/stable/torch.html),
 
 ## 🛠️ Getting Started
@@ -56,6 +58,8 @@ pip install -r requirements.txt
 python main, NNP.py --model NNP_
 python main, LeNet - 5.py --model LeNet_
 python main, VGG.py -- model VGG_
+python main, GoogleNet.py -- model GoogleNet_
+python main, ResNet.py -- model ResNet_
 
 4. Performance Comparison
 Comparison table will be updated as new models are implemented.
