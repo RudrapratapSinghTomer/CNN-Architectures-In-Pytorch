@@ -189,25 +189,3 @@ for epoch in range(20):
         y_pred = torch.argmax(output)
         correct += (y_pred == lables).sum().item()
         total += len(lables)
-
-model.eval()
-
-correct, total, batch_loss_eval, loss_eval = 0, 0, 0, 0
-
-with torch.no_grad():
-    for images_eval, lables_eval in test_loader:
-        images_eval, lables_eval = images_eval.to(device), lables_eval.to(device)
-
-        output = model(images_eval)
-        loss = loss_fn(output, lables_eval)
-
-        batch_loss_eval = loss.item()
-        loss_eval += loss.item()
-
-        y_pred_eval = nn.Softmax(output)
-        y_pred_eval = torch.argmax(output)
-
-        correct_eval += (y_pred_eval == lables).sum().item()
-        total_eval += len(lables)
-
-acc_eval = correct_eval/total_eval

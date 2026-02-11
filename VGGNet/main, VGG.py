@@ -81,7 +81,7 @@ test_dataloader = DataLoader(test_dataset, batch_size=256, shuffle=False)
 
 device = torch.device(f'cuda' if torch.cuda.is_available else 'cpu')
 
-model = VGG_()
+model = VGG_().to(device=device)
 model.to(device)
 optimizer = optim.SGD(model.get_parameter, lr=0.01, momentum=0.9, weight_decay=0.0005)
 loss_fn = nn.CrossEntropyLoss()
@@ -110,28 +110,3 @@ for epoch in range(74):
 
     acc = correct/total
     print(f"Epoch {epoch+1}, Loss={total_loss/len(train_dataloader):.4f}, Acc={acc:.4f}")
-
-model.eval
-
-corrects = 0
-totals = 0
-
-with torch.no_grad():
-    for images_, labels_ in test_dataloader:
-        images_, labels_ = images_.to(device), labels_.to(device)
-        outputs = model(images_)
-        losses = loss_fn(output, labels_)
-
-
-        loss.backward()
-        optimizer.step()
-
-        y_pred_ = torch.softmax(outputs)
-        y_pred_ = torch.argmax(y_pred_)
-
-        corrects += (y_pred == lables).sum().item()
-        totals += len(labels_)
-
-        acc_ = corrects/totals
-
-print(f'Test Accuracy', {acc_})

@@ -79,19 +79,3 @@ for epoch in range(5):
 
     acc = correct / total
     print(f"Epoch {epoch+1}, Loss={total_loss/len(train_dataloader):.4f}, Acc={acc:.4f}")
-
-model.eval()
-
-correct, total = 0, 0
-
-with torch.no_grad:
-    for images, lables in test_dataloader:
-        images , lables = images.to(device), lables.to(device)
-        output = model(images)
-
-        y_pred = torch.softmax(output, dim=1)
-        y_pred = torch.argmax(y_pred, dim=1)
-        correct += (y_pred == lables).sum().item()
-        total += lables.size(0)
-
-print("Test Accuracy:", correct / total)

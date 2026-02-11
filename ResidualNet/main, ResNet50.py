@@ -42,9 +42,9 @@ class BottleNeck(nn.Module):
 
         return x
 
-class ResNet_(nn.Module):
+class ResNet_50(nn.Module):
     def __init__(self, img_channel, num_layer = 50, num_channel = 1000):
-        super(self, ResNet_).__init__()
+        super(self, ResNet_50).__init__()
         if num_layer==50:
             layers = [3, 4, 6, 3]
             self.expansion = 4
@@ -106,7 +106,7 @@ test_dataloader = DataLoader(test_dataset, batch_size=256, shuffle=False)
 
 device = torch.device('cuda' if torch.cuda.is_available else 'cup')
 
-model = ResNet_()
+model = ResNet_50().to(device)
 
 optimizer = optim.SGD(model.parameters(), lr=0.1, momentum=0.9, weight_decay=0.0001)
 loss_fn = nn.CrossEntropyLoss()
@@ -136,25 +136,3 @@ for epoch in range():
         y_pred = torch.argmax(y_pred)
 
         correct += (y_pred == labels).sum().item()
-
-model.eval()
-
-correct, total, batch_loss_eval, loss_eval = 0, 0, 0, 0
-
-with torch.no_grad():
-    for images_eval, lables_eval in test_dataloader:
-        images_eval, lables_eval = images_eval.to(device), lables_eval.to(device)
-
-        output = model(images_eval)
-        loss = loss_fn(output, lables_eval)
-
-        batch_loss_eval = loss.item()
-        loss_eval += loss.item()
-
-        y_pred_eval = nn.Softmax(output)
-        y_pred_eval = torch.argmax(output)
-
-        correct_eval += (y_pred_eval == lables).sum().item()
-        total_eval += len(lables)
-
-acc_eval = correct_eval/total_eval
