@@ -1,19 +1,21 @@
 import torch
-import matplotlib.pyplot as plt
+import torch.nn as nn
+import torch.optim as optim
+# import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
-from NNP import NNP_
-from LeNet import LeNet_
-from AlexNet import AlexNet_
-from VGGNet import VGG_
-from GoogleNet import GoogleNet_
-from ResidualNet import ResNet_34, ResNet_50
-from MobileNet import MobileNet_
+from NNP import main_NNP
+from LeNet import main_LeNet
+from AlexNet import main_AlexNet
+from VGGNet import main_VGG
+from GoogleNet import main_GoogleNet
+from ResidualNet import main_ResNet34, main_ResNet50
+from MobileNet import main_MobileNet
 
-transform = transforms.Compose([transforms.Resize((256,256)), 
-                                transforms.RandomHorizontalFlip(), 
-                                transforms.ToTensor(), 
-                                transforms.Normalize((0.5,), (0.5,))])
+transform = transforms.Compose([transforms.Resize((224,224)), 
+                                    transforms.RandomHorizontalFlip(), 
+                                        transforms.ToTensor(), 
+                                            transforms.Normalize((0.5,), (0.5,))])
 
 train_dataset = datasets.CIFAR10(root='./path', 
                                             train=True, 
@@ -24,39 +26,68 @@ test_dataset = datasets.CIFAR10(root='./path',
                                                 transform=transform, 
                                                     download=True)
 
-device = torch.device('cuda' if torch.cuda.is_available() else 'cup')
+train_dataloader = DataLoader(dataset=train_dataset, 
+                                            batch_size=16, 
+                                                shuffle=True, 
+                                                    batch_sampler=10)
+test_dataloader = DataLoader(dataset=test_dataset, 
+                                            batch_size=16, 
+                                                shuffle=False, 
+                                                    batch_sampler=10)
 
-def evaluatin(model, test_dataloader, device):
+device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+def train_and_eval(model_class, train_dataloader, test_dataloader, device):
+    # Initialize model
+    model = model_class().to(device)
+    loss_fn = nn.CrossEntropyLoss()
+    optimizer = optim.Adam(model.parameters(), lr=0.001)
+
+    # Training Loop
+    model.train()
+    for epoch in range(1):
+        for images, labels in train_dataloader:
+            images, labels = images.to(device), labels.to(device)
+            
+            outputs = model(images)
+            loss = loss_fn(outputs, labels)
+
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+
+    # Evaluation Loop
     model.eval()
     correct = 0
     total = 0
-
-    with torch.no_grad:
-        for images, lables in test_dataloader:
-            images, lables = images.to(device), lables.to(device)
-
-            output = model(images)
-
-            _, y_pred = torch.max(output.data, 1)
-            total += lables.size(0)
-            correct += (y_pred == lables).sum().item()
-
-    return 100 * (correct/total)
+    with torch.no_grad():
+        for images, labels in test_dataloader:
+            images, labels = images.to(device), labels.to(device)
+            outputs = model(images)
+            _, predicted = torch.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+    
+    return 100 * (correct / total)
 
 results = {}
-models = {'NNP': NNP_, 
-          'LeNet': LeNet_, 
-          'AlexNet': AlexNet_,
-          'VGG': VGG_,
-          'GoogleNet': GoogleNet_,
-          'ResNet34': ResNet_34, 
-          'ResNet50': ResNet_50}
+models = {
+    'NNP': main_NNP, 
+        'LeNet': main_LeNet, 
+            'AlexNet': main_AlexNet,
+                'VGG': main_VGG,
+                    'GoogleNet': main_GoogleNet,
+                        'ResNet34': main_ResNet34, 
+                            'ResNet50': main_ResNet50
+          }
 
-for name, model in models:
-    results[name] = evaluatin(model=model, test_dataloader=test_dataset, device=device)
+for name, m_class in models.items():
+    print(f"Training {name}...")
+    acc = train_and_eval(m_class, train_dataloader, test_dataloader, device)
+    results[name] = acc
 
-#plot
-plt.bar(results.keys(), results.values(), color=['blue', 'green', 'red', 'purple'])
-plt.ylabel("accuracy(%)")
-plt.title('Model Accuracy Comparison')
-plt.show()
+# Plotting
+# plt.bar(results.keys(), results.values())
+# plt.ylabel("Accuracy (%)")
+# plt.title('Model Accuracy Comparison')
+# plt.show()

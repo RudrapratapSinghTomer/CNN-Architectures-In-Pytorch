@@ -7,7 +7,7 @@ from torchvision import datasets, transforms
 
 class NNP_(nn.Module):
     def __init__(self):
-        super().__init__()
+        super(NNP_, self).__init__()
         fc1 = nn.Linear(16*4*4,120)
         fc2 = nn.Linear(120,84)
         fc3 = nn.Linear(84,10)
