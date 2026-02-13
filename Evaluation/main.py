@@ -1,16 +1,17 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
-from NNP import main_NNP
-from LeNet import main_LeNet
-from AlexNet import main_AlexNet
-from VGGNet import main_VGG
-from GoogleNet import main_GoogleNet
-from ResidualNet import main_ResNet34, main_ResNet50
-from MobileNet import main_MobileNet
+from NNP.main_NNP import NNP_
+from LeNet.main_LeNet import LeNet_
+from AlexNet.main_AlexNet import AlexNet_
+from VGGNet.main_VGG import VGG_
+from GoogleNet.main_GoogleNet import GoogleNet_
+from ResidualNet.main_ResNet34 import ResNet_34
+from ResidualNet.main_ResNet50 import  ResNet_50
+from MobileNet.main_MobileNet import MobileNetv1_
 
 transform = transforms.Compose([transforms.Resize((224,224)), 
                                     transforms.RandomHorizontalFlip(), 
@@ -72,13 +73,13 @@ def train_and_eval(model_class, train_dataloader, test_dataloader, device):
 
 results = {}
 models = {
-    'NNP': main_NNP, 
-        'LeNet': main_LeNet, 
-            'AlexNet': main_AlexNet,
-                'VGG': main_VGG,
-                    'GoogleNet': main_GoogleNet,
-                        'ResNet34': main_ResNet34, 
-                            'ResNet50': main_ResNet50
+    'NNP': NNP_, 
+        'LeNet': LeNet_, 
+            'AlexNet': AlexNet_,
+                'VGG': VGG_,
+                    'GoogleNet': GoogleNet_,
+                        'ResNet34': ResNet_34, 
+                            'ResNet50': ResNet_50
           }
 
 for name, m_class in models.items():
