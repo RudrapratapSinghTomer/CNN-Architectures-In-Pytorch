@@ -8,17 +8,17 @@ from torchvision import datasets, transforms
 class AlexNet_(nn.Module):
     def __init__(self):
         super().__init__()
-        conv1 = nn.Conv2d(3, 96, 11, stride=4, padding=1)
-        conv2 = nn.Conv2d(96, 256, 5, padding=2)
-        conv3 = nn.Conv2d(256, 384, 3, padding=1)
-        conv4 = nn.Conv2d(384, 384, 3, padding=1)
-        conv5 = nn.Conv2d(384, 256, 3, padding=1)
+        self.conv1 = nn.Conv2d(3, 96, 11, stride=4, padding=1)
+        self.conv2 = nn.Conv2d(96, 256, 5, padding=2)
+        self.conv3 = nn.Conv2d(256, 384, 3, padding=1)
+        self.conv4 = nn.Conv2d(384, 384, 3, padding=1)
+        self.conv5 = nn.Conv2d(384, 256, 3, padding=1)
 
-        fc1 = nn.Linear(6*6*256,4096)
-        fc2 = nn.Linear(4096,4096)
-        fc2 = nn.Linear(4096,1000)
+        self.fc1 = nn.Linear(6*6*256,4096)
+        self.fc2 = nn.Linear(4096,4096)
+        self.fc3 = nn.Linear(4096,1000)
 
-    def forward_pass(self, x):
+    def forward(self, x):
         x = F.relu(self.conv1(x))
         x = F.max_pool2d(x, 3, 2)
 
@@ -29,9 +29,9 @@ class AlexNet_(nn.Module):
         x = F.relu(self.conv4(x))
         x = F.relu(self.conv5(x))
 
-        x = torch.flatten(x, 1)
+        x = F.max_pool2d(x, 3, stride=2)
 
-        x = F.max_pool2d(x, 3, 2)
+        x = torch.flatten(x, 1)
 
         x = nn.Dropout(F.relu(self.fc1(x)), 0.5)
         x = nn.Dropout(F.relu(self.fc2(x)), 0.5)
@@ -47,8 +47,8 @@ transform = transforms.Compose([transforms.Resize((256,256)),
 test_dataset = datasets.CIFAR10(root='./data', train=True, transform=transform, download=True)
 train_dataset = datasets.CIFAR10(root='./data', train=False, transform=transform, download=True)
 
-test_dataloader = DataLoader(test_dataset, 1000, batch_size=64, shuffle=True)
-train_dataloader = DataLoader(train_dataset, 1000, batch_size=64, shuffle=False)
+test_dataloader = DataLoader(test_dataset, batch_size=64, shuffle=True)
+train_dataloader = DataLoader(train_dataset, batch_size=64, shuffle=False)
 
 device = torch.device(f'cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -64,7 +64,7 @@ for epoch in range(5):
 
     for images, lables in train_dataloader:
         images , lables = images.to(device), lables.to(device)
-        output = model(images)
+        output = model(images.unsqueeze(0))
         loss = loss_fn(output, lables)
 
         optimizer.zero_grad
