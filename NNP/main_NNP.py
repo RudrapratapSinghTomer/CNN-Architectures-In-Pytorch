@@ -7,12 +7,12 @@ from torchvision import datasets, transforms
 
 class NNP_(nn.Module):
     def __init__(self):
-        super(NNP_, self).__init__()
-        fc1 = nn.Linear(16*4*4,120)
-        fc2 = nn.Linear(120,84)
-        fc3 = nn.Linear(84,10)
+        super().__init__()
+        self.fc1 = nn.Linear(3072,120)
+        self.fc2 = nn.Linear(120,84)
+        self.fc3 = nn.Linear(84,10)
 
-    def forward_pass(self, x):
+    def forward(self, x):
 
         x = torch.flatten(x, 1)
 
@@ -36,24 +36,25 @@ test_dataset = datasets.CIFAR10(root="./data",
                                                     download=True, 
                                                         transform=transform)
 
-train_dataloader = DataLoader(train_dataset, 1000, batch_size=64, shuffle=True)
+train_dataloader = DataLoader(train_dataset, batch_size=64, shuffle=True)
 
-test_dataloader = DataLoader(test_dataset, 1000, batch_size=64, shuffle=False)
+test_dataloader = DataLoader(test_dataset, batch_size=64, shuffle=False)
 
 device = torch.device(f'cuda' if torch.cuda.is_available() else 'cpu')
 
 model = NNP_().to(device)
+print(f"Number of parameters: {sum(p.numel() for p in model.parameters())}")
 loss_fn = nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters, lr=0.001)
+optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-for epoch in range(5):
+for epoch in range(50):
     model.train()
     total_loss = 0 #
     correct = 0 #
     total = 0 #
 
     for images, labels in train_dataloader:
-        images, lables = images.to(device), labels.to(device)
+        images, labels = images.to(device), labels.to(device)
         output = model(images)
         loss = loss_fn(output, labels)
 

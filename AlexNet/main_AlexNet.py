@@ -39,7 +39,7 @@ class AlexNet_(nn.Module):
 
         return x
 
-transform = transforms.Compose([
+transform = transforms.Compose([transforms.Resize((256,256)),
     transforms.ToTensor(),
     transforms.Normalize((0.5,), (0.5,))
 ])
@@ -54,7 +54,7 @@ device = torch.device(f'cuda' if torch.cuda.is_available() else 'cpu')
 
 model = AlexNet_().to(device)
 loss_fn = nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters, lr=0.01)
+optimizer = optim.Adam(model.parameters(), lr=0.01)
 
 for epoch in range(5):
     model.train()
