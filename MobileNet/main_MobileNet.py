@@ -41,6 +41,18 @@ class DepthwiseSeparableConv(nn.Module):
         x = self.relupointwise(x)
         
         return x
+
+class ConvBlock(nn.Module):
+    def __init__(self, in_channel, out_channel, stride):
+        super().__init__()
+        self.conv0 = nn.Conv2d(in_channels=in_channel, out_channels=out_channel, kernel_size=3, stride=stride, padding=1, bias=False)
+        self.bn0 = nn.BatchNorm2d(out_channel)
+        self.relu0 = nn.ReLU6(inplace=True)
+    
+    def forward(self, x):
+        x = self.relu0(self.bn0(self.conv0(x)))
+
+        return x
     
 class MobileNetv1_(nn.Module):
     def __init__(self,):
