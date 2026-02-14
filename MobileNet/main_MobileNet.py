@@ -114,13 +114,14 @@ test_dataloder = DataLoader(dataset=test_dataset, batch_size=256, shuffle=True)
 train_dataloder = DataLoader(dataset=train_dataset, batch_size=256, shuffle=True)
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-
+print(device)
 model = MobileNetv1_().to(device)
+print(f"Number of parameters: {sum(p.numel() for p in model.parameters())}")
 
 optimizer = optim.Adam(model.parameters(), lr=0.0001,)
 loss_fn = nn.CrossEntropyLoss()
 
-for epoch in range(5):
+for epoch in range(1):
     
     correct = 0
     total = 0
