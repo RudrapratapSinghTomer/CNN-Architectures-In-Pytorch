@@ -64,10 +64,26 @@ class MobileNetv1_(nn.Module):
         stride=2,
         padding=1)
 
+        self.config = [
+            (64, 1),
+            (128, 2),
+            (128, 1),
+            (256, 2),
+            (256, 1),
+            (512, 2),
+            (512, 1),
+            (512, 1),
+            (512, 1),
+            (512, 1),
+            (512, 1),
+            (1024, 2),
+            (1024, 1),
+        ]
+
         self.bn1 = nn.BatchNorm2d(32)
         self.relu = nn.ReLU(inplace=True)
 
-    def forward(self,):
+    def forward(self, x):
         
         pass
 
