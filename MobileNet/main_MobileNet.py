@@ -55,14 +55,14 @@ class ConvBlock(nn.Module):
         return x
     
 class MobileNetv1_(nn.Module):
-    def __init__(self,):
+    def __init__(self, num_classes=1000):
         super(MobileNetv1_, self).__init__()
-        self.conv1 = nn.Conv2d(
+        self.conv1 = ConvBlock(
         in_channels=3,
         out_channels=32,
         kernel_size=3,
         stride=2,
-        padding=1)
+        padding=1,)
 
         self.config = [
             (64, 1),
@@ -80,8 +80,16 @@ class MobileNetv1_(nn.Module):
             (1024, 1),
         ]
 
-        self.bn1 = nn.BatchNorm2d(32)
-        self.relu = nn.ReLU(inplace=True)
+        layers = []
+        in_channels = 32
+        for out_channels, stride in self.config:
+            layers.append(DepthwiseSeparableConv(in_channels, out_channels, stride))
+
+        self.layers = nn.Sequential(*layers)
+
+        self.avgpool = nn.AdaptiveAvgPool2d((1,1))
+
+        self.fc = nn.Linear(1024, num_classes)
 
     def forward(self, x):
         
