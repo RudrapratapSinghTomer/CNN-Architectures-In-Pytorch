@@ -17,7 +17,7 @@ class DepthwiseSeparableConv(nn.Module):
         groups= in_channels
     )
         self.bndepthwise = nn.BatchNorm2d(in_channels)
-        self.reludepthwise = nn.ReLU(inplace=True)
+        self.reludepthwise = nn.ReLU6(inplace=True)
 
         self.pointwise = nn.Conv2d(
         in_channels = in_channels,
@@ -29,7 +29,7 @@ class DepthwiseSeparableConv(nn.Module):
     )
         
         self.bnpointwise = nn.BatchNorm2d(out_channels)
-        self.relupointwise = nn.ReLU(inplace=True)
+        self.relupointwise = nn.ReLU6(inplace=True)
 
     def forward(self, x):
         x = self.depthwise(x)
@@ -92,8 +92,13 @@ class MobileNetv1_(nn.Module):
         self.fc = nn.Linear(1024, num_classes)
 
     def forward(self, x):
+        x = self.conv1(x)
+        x = self.layers(x)
+        x = self.pool(x)
+        x = torch.flatten(x, 1)
+        x = self.fc(x)
         
-        pass
+        return x
 
 transform = transforms.Compose([transforms.Resize((256,256)), 
                                 transforms.RandomHorizontalFlip(), 
