@@ -58,8 +58,8 @@ class MobileNetv1_(nn.Module):
     def __init__(self, num_classes=1000):
         super(MobileNetv1_, self).__init__()
         self.conv1 = ConvBlock(
-        in_channels=3,
-        out_channels=32,
+        in_channel=3,
+        out_channel=32,
         stride=2)
 
         self.config = [
@@ -83,7 +83,7 @@ class MobileNetv1_(nn.Module):
         for out_channels, stride in self.config:
             layers.append(DepthwiseSeparableConv(in_channels, out_channels, stride))
 
-        in_channels = out_channels
+            in_channels = out_channels
 
         self.layers = nn.Sequential(*layers)
 
@@ -107,8 +107,8 @@ transform = transforms.Compose([transforms.Resize((256,256)),
                                                     (0.2470, 0.2435, 0.2616)
                                                     )])
 
-train_dataset = datasets.CIFAR10(root='./path', train=True, transform=transform, download=False)
-test_dataset = datasets.CIFAR10(root='./path', train=False, transform=transform, download=False)
+train_dataset = datasets.CIFAR10(root='./path', train=True, transform=transform, download=True)
+test_dataset = datasets.CIFAR10(root='./path', train=False, transform=transform, download=True)
 
 test_dataloder = DataLoader(dataset=test_dataset, batch_size=256, shuffle=True)
 train_dataloder = DataLoader(dataset=train_dataset, batch_size=256, shuffle=True)
@@ -117,6 +117,50 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 model = MobileNetv1_().to(device)
 
-model.train()
-optimizer = optim.Adam(model.parameters, lr=0.0001,)
+optimizer = optim.Adam(model.parameters(), lr=0.0001,)
 loss_fn = nn.CrossEntropyLoss()
+
+for epoch in range(5):
+    
+    correct = 0
+    total = 0
+    total_loss = 0
+    model.train()
+
+    for images, lables in train_dataloder:
+        images, lables = images.to(device), lables.to(device)
+
+        output = model(images)
+
+        loss = loss_fn(output, lables)
+
+        optimizer.zero_grad()
+        loss.backward()
+        optimizer.step()
+
+        total_loss += loss.item()
+
+        y_hat = torch.argmax(output)
+        y_hat = torch.softmax(y_hat)
+
+acc = (output == lables).sum().item()
+print(f"Epoch {epoch+1}, Loss={total_loss/len(train_dataloder):.4f}, Acc={acc:.4f}")
+
+model.eval()
+with torch.no_grad():
+    corrects = 0
+    totals = 0
+    total_loss = 0
+
+    output = model(images)
+
+    loss = loss_fn(output, lables)
+
+    total_loss += loss.item()
+
+    y_hat = torch.argmax(output)
+    y_hat = torch.softmax(y_hat)
+    correct += (y_hat == lables).sum().item()
+    total += lables.sum().item()
+
+print("Test Accuracy:", corrects / totals)
