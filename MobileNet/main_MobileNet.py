@@ -60,9 +60,7 @@ class MobileNetv1_(nn.Module):
         self.conv1 = ConvBlock(
         in_channels=3,
         out_channels=32,
-        kernel_size=3,
-        stride=2,
-        padding=1,)
+        stride=2)
 
         self.config = [
             (64, 1),
@@ -85,6 +83,8 @@ class MobileNetv1_(nn.Module):
         for out_channels, stride in self.config:
             layers.append(DepthwiseSeparableConv(in_channels, out_channels, stride))
 
+        in_channels = out_channels
+
         self.layers = nn.Sequential(*layers)
 
         self.avgpool = nn.AdaptiveAvgPool2d((1,1))
@@ -94,22 +94,24 @@ class MobileNetv1_(nn.Module):
     def forward(self, x):
         x = self.conv1(x)
         x = self.layers(x)
-        x = self.pool(x)
+        x = self.avgpool(x)
         x = torch.flatten(x, 1)
         x = self.fc(x)
-        
+
         return x
 
 transform = transforms.Compose([transforms.Resize((256,256)), 
                                 transforms.RandomHorizontalFlip(), 
                                 transforms.ToTensor(), 
-                                transforms.Normalize()])
+                                transforms.Normalize((0.4914, 0.4822, 0.4465),
+                                                    (0.2470, 0.2435, 0.2616)
+                                                    )])
 
-test_dataset = datasets.CIFAR10(root='./path', train=True, transform=transform, download=False)
-train_dataset = datasets.CIFAR10(root='./path', train=False, transform=transform, download=False)
+train_dataset = datasets.CIFAR10(root='./path', train=True, transform=transform, download=False)
+test_dataset = datasets.CIFAR10(root='./path', train=False, transform=transform, download=False)
 
 test_dataloder = DataLoader(dataset=test_dataset, batch_size=256, shuffle=True)
-test_dataloder = DataLoader(dataset=train_dataset, batch_size=256, shuffle=True)
+train_dataloder = DataLoader(dataset=train_dataset, batch_size=256, shuffle=True)
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
