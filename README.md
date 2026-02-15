@@ -38,11 +38,13 @@ All models are trained and tested on the [CIFAR-10 Dataset](https://www.cs.toron
 
 - **Residual Net (Original Paper)**: [Deep Residual Learning for Image Recognition](https://arxiv.org/pdf/1512.03385)
 
-- **ResNet Guide18**: [Implementing ResNet18 in PyTorch from Scratch](https://debuggercafe.com/implementing-resnet18-in-pytorch-from-scratch/), [Wikipedia, Residual neural network](https://en.wikipedia.org/wiki/Residual_neural_network)
+- **ResNet18 Guide**: [Implementing ResNet18 in PyTorch from Scratch](https://debuggercafe.com/implementing-resnet18-in-pytorch-from-scratch/), [Wikipedia, Residual neural network](https://en.wikipedia.org/wiki/Residual_neural_network)
 
-- **ResNet Guide50**: [Building ResNets from Scratch using PyTorch](https://debuggercafe.com/building-resnets-from-scratch-using-pytorch/)
+- **ResNet50 Guide**: [Building ResNets from Scratch using PyTorch](https://debuggercafe.com/building-resnets-from-scratch-using-pytorch/)
 
 - **MobileNet (Original Paper)**: [MobileNets: Efficient Convolutional Neural Networks for Mobile Vision](https://arxiv.org/pdf/1704.04861), [Searching for MobileNetV3 | Paper Walkthrough & PyTorch Implementation](https://www.youtube.com/watch?v=0oqs-inp7sA&t=37s)
+
+- **UNet Guide**: [Implementing UNet from Scratch Using PyTorch](https://debuggercafe.com/unet-from-scratch-using-pytorch/), [Training UNet from Scratch using PyTorch](https://debuggercafe.com/training-unet-from-scratch/)
 
 - **Pytorch Guide**: [Pytorch Documentation](https://docs.pytorch.org/docs/stable/torch.html),
 
