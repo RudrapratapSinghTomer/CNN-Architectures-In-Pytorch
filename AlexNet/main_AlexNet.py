@@ -77,5 +77,5 @@ for epoch in range(5):
         correct += (y_pred == lables).sum().iteam()
         total += lables.size(0)
 
-    acc = correct / total
-    print(f"Epoch {epoch+1}, Loss={total_loss/len(train_dataloader):.4f}, Acc={acc:.4f}")
+acc = correct / total
+print(f"Epoch {epoch+1}, Loss={total_loss/len(train_dataloader):.4f}, Acc={acc:.4f}")

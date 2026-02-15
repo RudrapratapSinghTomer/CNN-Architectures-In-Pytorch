@@ -42,7 +42,7 @@ All models are trained and tested on the [CIFAR-10 Dataset](https://www.cs.toron
 
 - **ResNet Guide50**: [Building ResNets from Scratch using PyTorch](https://debuggercafe.com/building-resnets-from-scratch-using-pytorch/)
 
-- **Residual Net (Original Paper)**: [MobileNets: Efficient Convolutional Neural Networks for Mobile Vision](https://arxiv.org/pdf/1704.04861), [Searching for MobileNetV3 | Paper Walkthrough & PyTorch Implementation](https://www.youtube.com/watch?v=0oqs-inp7sA&t=37s)
+- **MobileNet (Original Paper)**: [MobileNets: Efficient Convolutional Neural Networks for Mobile Vision](https://arxiv.org/pdf/1704.04861), [Searching for MobileNetV3 | Paper Walkthrough & PyTorch Implementation](https://www.youtube.com/watch?v=0oqs-inp7sA&t=37s)
 
 - **Pytorch Guide**: [Pytorch Documentation](https://docs.pytorch.org/docs/stable/torch.html),
 
