@@ -37,46 +37,49 @@ class AlexNet_(nn.Module):
         x = self.fc3(x) 
 
         return x
+def main():
+    transform = transforms.Compose([
+        #transforms.Resize((224,224)), #change this as per preferance, for now 32 to save memory
+        transforms.ToTensor(),
+        transforms.Normalize((0.5,0.5,0.5), 
+                            (0.5,0.5,0.5))
+    ])
 
-transform = transforms.Compose([
-    #transforms.Resize((224,224)), #change this as per preferance, for now 32 to save memory
-    transforms.ToTensor(),
-    transforms.Normalize((0.5,0.5,0.5), 
-                         (0.5,0.5,0.5))
-])
+    train_dataset = datasets.CIFAR10(root='./data', train=True, transform=transform, download=True)
+    test_dataset = datasets.CIFAR10(root='./data', train=False, transform=transform, download=True)
 
-train_dataset = datasets.CIFAR10(root='./data', train=True, transform=transform, download=True)
-test_dataset = datasets.CIFAR10(root='./data', train=False, transform=transform, download=True)
+    train_dataloader = DataLoader(train_dataset, batch_size=64, shuffle=True, num_workers=0, pin_memory=True) # Added pin_memory=True to help the GPU pipeline
+    test_dataloader = DataLoader(test_dataset, batch_size=64, shuffle=False)
 
-train_dataloader = DataLoader(train_dataset, batch_size=64, shuffle=True, num_workers=0, pin_memory=True) # Added pin_memory=True to help the GPU pipeline
-test_dataloader = DataLoader(test_dataset, batch_size=64, shuffle=False)
+    device = torch.device(f'cuda' if torch.cuda.is_available() else 'cpu')
 
-device = torch.device(f'cuda' if torch.cuda.is_available() else 'cpu')
+    model = AlexNet_().to(device)
+    loss_fn = nn.CrossEntropyLoss()
+    optimizer = optim.Adam(model.parameters(), lr=0.0001)
 
-model = AlexNet_().to(device)
-loss_fn = nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters(), lr=0.0001)
+    for epoch in range(5):
+        model.train()
+        total_loss = 0
+        correct = 0
+        total = 0
 
-for epoch in range(5):
-    model.train()
-    total_loss = 0
-    correct = 0
-    total = 0
+        for images, lables in train_dataloader:
+            images , lables = images.to(device), lables.to(device)
+            output = model(images)
+            loss = loss_fn(output, lables)
 
-    for images, lables in train_dataloader:
-        images , lables = images.to(device), lables.to(device)
-        output = model(images)
-        loss = loss_fn(output, lables)
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
 
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
+            total_loss += loss.item()
 
-        total_loss += loss.item()
+            y_pred = torch.argmax(output, dim=1)
+            correct += (y_pred == lables).sum().item()
+            total += lables.size(0)
 
-        y_pred = torch.argmax(output, dim=1)
-        correct += (y_pred == lables).sum().item()
-        total += lables.size(0)
+        acc = correct / total
+        print(f"Epoch {epoch+1}, Loss={total_loss/len(train_dataloader):.4f}, Acc={acc:.4f}")
 
-    acc = correct / total
-    print(f"Epoch {epoch+1}, Loss={total_loss/len(train_dataloader):.4f}, Acc={acc:.4f}")
+if __name__ == "__main__":
+    main()
