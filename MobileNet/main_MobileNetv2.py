@@ -46,7 +46,7 @@ class BottleNeck(nn.Module):
 
     def forward(self, input_image):
         if self.expansion == 1:
-            x = self.dw(input_image)
+            x = self.depth(input_image)
             x = self.pw(x)
         else:
             x = self.conv1(input_image)
