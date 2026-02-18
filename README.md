@@ -8,11 +8,11 @@ The project explores the evolution of CNNs—from early models like LeNet-5 to a
 ## 🏗️ Supported Architectures
 - [x] **Neural Network Perceptron (NNP)**: A basic baseline for comparison.
 - [x] **LeNet-5**: The pioneer of CNNs, originally designed for handwritten digit recognition.
-- [ ] **AlexNet**: The model that popularized deep learning in 2012.
-- [ ] **VGGNet**: Exploration of depth using small $3 \times 3$ filters.
-- [ ] **InceptionNet**: Multi-scale feature extraction through inception modules.
-- [ ] **ResNet**: Utilizing skip connections to train ultra-deep networks.
-- [ ] **MobileNet**: Lightweight convolutions for mobile devices. (In progress)
+- [X] **AlexNet**: The model that popularized deep learning in 2012.
+- [X] **VGGNet**: Exploration of depth using small $3 \times 3$ filters.
+- [X] **InceptionNet**: Multi-scale feature extraction through inception modules.
+- [X] **ResNet**: Utilizing skip connections to train ultra-deep networks.
+- [X] **MobileNet**: Lightweight convolutions for mobile devices. (In progress)
 - [ ] **ShuffleNet**: Channel shuffling for efficient computation. (Upcoming)
 - [ ] **EfficientNet**: Systematic scaling of depth, width, and resolution. (Upcoming)
 
