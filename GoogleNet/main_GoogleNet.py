@@ -183,7 +183,7 @@ for epoch in range(20):
     for images, lables in train_loader:
         images, lables = images.to(device), lables.to(device)
 
-        optimizer.zero_grad()
+        
         output, aux1, aux2 = model(images)
 
         loss = loss_fn(output, lables)
