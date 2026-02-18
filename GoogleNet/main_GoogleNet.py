@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.optim as optim
-import torch.functional as F
+import torch.nn.functional as F
 from torch.utils.data import DataLoader
 from torchvision import transforms, datasets
 
@@ -33,24 +33,24 @@ class MainInception(nn.Module):
                                  )
         
         self.Ix4 = nn.Sequential(nn.MaxPool2d(kernel_size=3, stride=1, padding=1),
-                                 MainConv2d(in_channels=poolproj, out_channels=n1x1, kernel_size=1),)
+                                 MainConv2d(in_channels=in_channels, out_channels=poolproj, kernel_size=1),)
 
     def forward(self, x):
-        self.Iy1 = self.Ix1(x)
-        self.Iy2 = self.Ix2(x)
-        self.Iy3 = self.Ix3(x)
-        self.Iy4 = self.Ix4(x)
+        Iy1 = self.Ix1(x)
+        Iy2 = self.Ix2(x)
+        Iy3 = self.Ix3(x)
+        Iy4 = self.Ix4(x)
         
-        return torch.cat([self.Iy1, self.Iy2, self.Iy3, self.Iy4], 1)
+        return torch.cat([Iy1, Iy2, Iy3, Iy4], dim=1)
 
 class AuxiliaryClassifier(nn.Module):
     def __init__(self, in_channels, num_classes, dropout=0.7):
         super(AuxiliaryClassifier, self).__init__()
-        self.avg_pool = nn.AvgPool2d(kernel_size=5, stride=3, padding=2)
+        self.avg_pool = nn.AdaptiveAvgPool2d((4,4))
         self.conv1 = nn.Sequential(MainConv2d(in_channels=in_channels, out_channels=128, kernel_size = 1),
                                    nn.ReLU(True),)
         self.flatten_ = nn.Flatten()
-        self.fc1 = nn.Linear(in_features=2048, out_features=1024)
+        self.fc1 = nn.Linear(in_features=128 * 4 * 4, out_features=1024)
         self.dropout_ = nn.Dropout(p=dropout)
         self.fc2 = nn.Linear(in_features=1024, out_features=num_classes)
 
@@ -97,14 +97,14 @@ class GoogleNet_(nn.Module):
         self.inception_8 = MainInception(in_channels=832, n1x1=256, n3x3_=160, n3x3=320, n5x5_=32, n5x5=128, poolproj=128)
         self.inception_9 = MainInception(in_channels=1024, n1x1=384, n3x3_=192, n3x3=384, n5x5_=48, n5x5=128, poolproj=128)
 
-        self.avgpool_1 = nn.AvgPool2d(kernel_size=7, stride=1, padding=1)
+        self.avgpool_1 = nn.AdaptiveAvgPool2d((1,1))
 
         if self.Aux:
-            self.auxiclas1 = AuxiliaryClassifier(in_channels=512, num_classes=1000, dropout=0.7)
-            self.auxiclas2 = AuxiliaryClassifier(in_channels=528, num_classes=1000, dropout=0.7)
+            self.auxiclas1 = AuxiliaryClassifier(in_channels=512, num_classes=10, dropout=0.7)
+            self.auxiclas2 = AuxiliaryClassifier(in_channels=528, num_classes=10, dropout=0.7)
 
         self.dropout_1 = nn.Dropout(0.4)
-        self.fc3 = nn.Linear(1024, 1000)
+        self.fc3 = nn.Linear(1024, 10)
 
     def forward(self, x):
         x = self.mainConv_1(x)
@@ -126,15 +126,19 @@ class GoogleNet_(nn.Module):
 
         x = self.inception_3(x)
 
-        auxclas1 = self.auxiclas1(x)
-        
+        aux1 = None
+        if self.Aux and self.training:
+            aux1 = self.auxiclas1(x)
+
         x = self.inception_4(x)
         x = self.inception_5(x)
         x = self.inception_6(x)
 
-        x = self.auxiclas1(x)
+        aux2 = None
+        if self.Aux and self.training:
+            aux2 = self.auxiclas2(x)
 
-        auxclas2 = self.inception_7(x)
+        x = self.inception_7(x)
 
         x = self.maxpool_4(x)
 
@@ -144,14 +148,17 @@ class GoogleNet_(nn.Module):
         x = self.avgpool_1(x)
 
         x = self.dropout_1(x)
+
+        x = torch.flatten(x, 1)
+        
         x = self.fc3(x)
         
-        return x, auxclas1, auxclas2
+        return x, aux1, aux2
 
 transform = transforms.Compose([transforms.Resize((224,224)), 
                                 transforms.RandomHorizontalFlip(), 
                                     transforms.ToTensor(), 
-                                        transforms.Normalize((0.5,), (0.5,))])
+                                        transforms.Normalize((0.5,0.5,0.5), (0.5,0.5,0.5))])
 
 train_dataset = datasets.CIFAR10(root='./path', train=True, transform=transform, download=True)
 test_dataset = datasets.CIFAR10(root='./path' , train=False, transform=transform, download=True)
@@ -177,8 +184,14 @@ for epoch in range(20):
         images, lables = images.to(device), lables.to(device)
 
         optimizer.zero_grad()
-        output = model(images)
+        output, aux1, aux2 = model(images)
+
         loss = loss_fn(output, lables)
+        if aux1 is not None:
+            loss += 0.3 * loss_fn(aux1, lables)
+
+        if aux2 is not None:
+            loss += 0.3 * loss_fn(aux2, lables)
 
         loss.backward()
         optimizer.step()
@@ -186,6 +199,6 @@ for epoch in range(20):
         batch_loss = loss.item()
         total_loss += loss.item()
 
-        y_pred = torch.argmax(output)
+        y_pred = torch.argmax(output, dim=1)
         correct += (y_pred == lables).sum().item()
         total += len(lables)
