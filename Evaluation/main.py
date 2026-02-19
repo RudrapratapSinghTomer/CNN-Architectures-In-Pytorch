@@ -11,7 +11,7 @@ from VGGNet.main_VGG import VGG_
 from GoogleNet.main_GoogleNet import GoogleNet_
 from ResidualNet.main_ResNet34 import ResNet_34
 from ResidualNet.main_ResNet50 import  ResNet_50
-from MobileNet.main_MobileNet import MobileNetv1_
+# from MobileNet.main_MobileNet import MobileNetv1_
 
 transform = transforms.Compose([transforms.Resize((224,224)), 
                                     transforms.RandomHorizontalFlip(), 
@@ -79,7 +79,7 @@ models = {
                 'VGG': VGG_,
                     'GoogleNet': GoogleNet_,
                         'ResNet34': ResNet_34, 
-                            'ResNet50': ResNet_50
+                            # 'ResNet50': ResNet_50
           }
 
 for name, m_class in models.items():

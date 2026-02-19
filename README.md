@@ -42,7 +42,9 @@ All models are trained and tested on the [CIFAR-10 Dataset](https://www.cs.toron
 
 - **ResNet50 Guide**: [Building ResNets from Scratch using PyTorch](https://debuggercafe.com/building-resnets-from-scratch-using-pytorch/)
 
-- **MobileNet (Original Paper)**: [MobileNets: Efficient Convolutional Neural Networks for Mobile Vision](https://arxiv.org/pdf/1704.04861), [Searching for MobileNetV3 | Paper Walkthrough & PyTorch Implementation](https://www.youtube.com/watch?v=0oqs-inp7sA&t=37s)
+- **MobileNet (Original Paper)**: [MobileNets: Efficient Convolutional Neural Networks for Mobile Vision](https://arxiv.org/pdf/1704.04861), 
+
+- **MobileNet Guide**:[Searching for MobileNetV3 | Paper Walkthrough & PyTorch Implementation](https://www.youtube.com/watch?v=0oqs-inp7sA&t=37s), [MobileNetV2 Paper Walkthrough: The Smarter Tiny Giant](https://towardsdatascience.com/mobilenetv2-paper-walkthrough-the-smarter-tiny-giant/)
 
 - **UNet Guide**: [Implementing UNet from Scratch Using PyTorch](https://debuggercafe.com/unet-from-scratch-using-pytorch/), [Training UNet from Scratch using PyTorch](https://debuggercafe.com/training-unet-from-scratch/)
 
