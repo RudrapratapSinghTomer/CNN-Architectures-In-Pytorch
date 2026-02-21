@@ -27,38 +27,6 @@ class ConvBlock(nn.Module):
         x = self.conv0(x)
         return x
 
-class InvertedResidual(nn.Module):
-    def __init__(self, in_channels, out_channels, stride, expand_ratio):
-        super().__init__()
-        
-        hidden_dim = in_channels * expand_ratio
-        self.use_residual = (stride == 1 and in_channels == out_channels)
-
-        layers = []
-
-        if expand_ratio != 1:
-            layers.append(nn.Conv2d(in_channels, hidden_dim, 1, bias=False))
-            layers.append(nn.BatchNorm2d(hidden_dim))
-            layers.append(nn.ReLU6(inplace=True))
-
-        # Depthwise
-        layers.append(nn.Conv2d(hidden_dim, hidden_dim, 3, stride,
-                                padding=1, groups=hidden_dim, bias=False))
-        layers.append(nn.BatchNorm2d(hidden_dim))
-        layers.append(nn.ReLU6(inplace=True))
-
-        #  Projection (Linear bottleneck)
-        layers.append(nn.Conv2d(hidden_dim, out_channels, 1, bias=False))
-        layers.append(nn.BatchNorm2d(out_channels))
-
-        self.block = nn.Sequential(*layers)
-
-    def forward(self, x):
-        if self.use_residual:
-            return x + self.block(x)
-        else:
-            return self.block(x)
-
 class InvResidualS1(nn.Module):
     def __init__(self, in_channels, out_channels, t):
         super().__init__()
