@@ -27,22 +27,31 @@ class ConvBlock(nn.Module):
         x = self.conv0(x)
         return x
 
+class InvertedResidual(nn.Module):
+    def __init__(self, in_channels, out_channels, stride, t):
+        super(self, InvertedResidual).__init__()
+        x
+        pass
+
+    def forward(self, x):
+
+        pass
+
 class InvResidualS1(nn.Module):
     def __init__(self, in_channels, out_channels, t):
         super().__init__()
-        self.pointwise1 = nn.Sequential(nn.Conv1d(in_channels, out_channels=in_channels*t, kernel_size=1, stride=1, padding=0, bias=False),
+        self.pointwise1 = nn.Sequential(nn.Conv2d(in_channels, out_channels=in_channels*t, kernel_size=1, stride=1, padding=0, bias=False),
                                        nn.BatchNorm2d(in_channels*t),
                                             nn.ReLU6(inplace=True),
                                             )
         
         self.depthwise1 = nn.Sequential(nn.Conv2d(in_channels*t, in_channels*t, kernel_size=3, stride=1, padding=1, groups=in_channels*t, bias=False),
-                                       nn.BatchNorm2d(in_channels),
+                                       nn.BatchNorm2d(in_channels*t),
                                             nn.ReLU6(inplace=True),
                                             )
 
-        self.pointwise2 = nn.Sequential(nn.Conv1d(in_channels*t, out_channels=out_channels, kernel_size=1, stride=1, padding=0, bias=False),
+        self.pointwise2 = nn.Sequential(nn.Conv2d(in_channels*t, out_channels=out_channels, kernel_size=1, stride=1, padding=0, bias=False),
                                        nn.BatchNorm2d(in_channels*t),
-                                            nn.ReLU6(inplace=True),
                                             )
 
     def forward(self, x):
@@ -61,19 +70,18 @@ class InvResidualS1(nn.Module):
 class InvResidualS2(nn.Module):
     def __init__(self, in_channels, out_channels, t):
         super().__init__()
-        self.pointwise1 = nn.Sequential(nn.Conv1d(in_channels=in_channels, out_channels=in_channels*t, kernel_size=1, stride=1, padding=0, bias=False),
+        self.pointwise1 = nn.Sequential(nn.Conv2d(in_channels=in_channels, out_channels=in_channels*t, kernel_size=1, stride=1, padding=0, bias=False),
                                        nn.BatchNorm2d(in_channels*t),
                                             nn.ReLU6(inplace=True),
                                             )
         
-        self.depthwise1 = nn.Sequential(nn.Conv2d(in_channels*t, in_channels*t, kernel_size=3, stride=1, padding=1, groups=in_channels*t, bias=False),
-                                       nn.BatchNorm2d(in_channels),
+        self.depthwise1 = nn.Sequential(nn.Conv2d(in_channels*t, in_channels*t, kernel_size=3, stride=2, padding=1, groups=in_channels*t, bias=False),
+                                       nn.BatchNorm2d(in_channels*t),
                                             nn.ReLU6(inplace=True),
                                             )
 
-        self.pointwise2 = nn.Sequential(nn.Conv1d(in_channels*t, out_channels=out_channels, kernel_size=1, stride=1, padding=0, bias=False),
+        self.pointwise2 = nn.Sequential(nn.Conv2d(in_channels*t, out_channels=out_channels, kernel_size=1, stride=1, padding=0, bias=False),
                                        nn.BatchNorm2d(in_channels*t),
-                                            nn.ReLU6(inplace=True),
                                             )
         
     def forward(self, x):
