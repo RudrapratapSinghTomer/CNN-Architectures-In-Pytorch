@@ -36,19 +36,18 @@ class InvertedResidual(nn.Module):
 
         layers = []
 
-        # 1️⃣ Expansion (if needed)
         if expand_ratio != 1:
             layers.append(nn.Conv2d(in_channels, hidden_dim, 1, bias=False))
             layers.append(nn.BatchNorm2d(hidden_dim))
             layers.append(nn.ReLU6(inplace=True))
 
-        # 2️⃣ Depthwise
+        # Depthwise
         layers.append(nn.Conv2d(hidden_dim, hidden_dim, 3, stride,
                                 padding=1, groups=hidden_dim, bias=False))
         layers.append(nn.BatchNorm2d(hidden_dim))
         layers.append(nn.ReLU6(inplace=True))
 
-        # 3️⃣ Projection (Linear bottleneck)
+        #  Projection (Linear bottleneck)
         layers.append(nn.Conv2d(hidden_dim, out_channels, 1, bias=False))
         layers.append(nn.BatchNorm2d(out_channels))
 
