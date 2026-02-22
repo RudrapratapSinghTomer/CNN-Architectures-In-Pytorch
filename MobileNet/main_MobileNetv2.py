@@ -29,69 +29,37 @@ class ConvBlock(nn.Module):
 
 class InvertedResidual(nn.Module):
     def __init__(self, in_channels, out_channels, stride, t):
-        super(self, InvertedResidual).__init__()
-        x
-        pass
-
-    def forward(self, x):
-
-        pass
-
-class InvResidualS1(nn.Module):
-    def __init__(self, in_channels, out_channels, t):
         super().__init__()
-        self.pointwise1 = nn.Sequential(nn.Conv2d(in_channels, out_channels=in_channels*t, kernel_size=1, stride=1, padding=0, bias=False),
-                                       nn.BatchNorm2d(in_channels*t),
-                                            nn.ReLU6(inplace=True),
-                                            )
-        
-        self.depthwise1 = nn.Sequential(nn.Conv2d(in_channels*t, in_channels*t, kernel_size=3, stride=1, padding=1, groups=in_channels*t, bias=False),
-                                       nn.BatchNorm2d(in_channels*t),
-                                            nn.ReLU6(inplace=True),
-                                            )
 
-        self.pointwise2 = nn.Sequential(nn.Conv2d(in_channels*t, out_channels=out_channels, kernel_size=1, stride=1, padding=0, bias=False),
-                                       nn.BatchNorm2d(in_channels*t),
-                                            )
+        hidden_dim = in_channels * t
+        self.use_residual = (stride == 1 and in_channels == out_channels)
+
+        layers = []
+        #PointWise
+        if t !=1:
+            layers.append(nn.Sequential(nn.Conv2d(in_channels=in_channels, out_channels=hidden_dim, kernel_size=1, bias=False),
+                                        nn.BatchNorm2d(hidden_dim),
+                                        nn.ReLU6(inplace=True),
+                                        ))
+
+        #DepthWise
+        layers.append(nn.Conv2d(in_channels=hidden_dim, out_channels=hidden_dim, kernel_size=3, stride=stride, padding=1, groups=hidden_dim, bias=False))
+        layers.append(nn.BatchNorm2d(out_channels=hidden_dim))
+        layers.append(nn.ReLU6(inplace=True))
+   
+        #PointWise
+        layers.append(nn.Sequential(nn.Conv2d(in_channels=hidden_dim, out_channels=out_channels, kernel_size=1, bias=False),
+                                        nn.BatchNorm2d(out_channels),
+                                        ))
+        
+        self.block = nn.Sequential(*layers)
 
     def forward(self, x):
-        identity = x
+        if self.use_residual:
+            return x + self.block(x)
+        else:
+            return self.block(x)
 
-        x = self.pointwise1(x)
-
-        x = self.depthwise1(x)
-
-        x = self.pointwise2(x)
-
-        x += identity
-
-        return x
-    
-class InvResidualS2(nn.Module):
-    def __init__(self, in_channels, out_channels, t):
-        super().__init__()
-        self.pointwise1 = nn.Sequential(nn.Conv2d(in_channels=in_channels, out_channels=in_channels*t, kernel_size=1, stride=1, padding=0, bias=False),
-                                       nn.BatchNorm2d(in_channels*t),
-                                            nn.ReLU6(inplace=True),
-                                            )
-        
-        self.depthwise1 = nn.Sequential(nn.Conv2d(in_channels*t, in_channels*t, kernel_size=3, stride=2, padding=1, groups=in_channels*t, bias=False),
-                                       nn.BatchNorm2d(in_channels*t),
-                                            nn.ReLU6(inplace=True),
-                                            )
-
-        self.pointwise2 = nn.Sequential(nn.Conv2d(in_channels*t, out_channels=out_channels, kernel_size=1, stride=1, padding=0, bias=False),
-                                       nn.BatchNorm2d(in_channels*t),
-                                            )
-        
-    def forward(self, x):
-        x = self.pointwise1(x)
-
-        x = self.depthwise1(x)
-
-        x = self.pointwise2(x)
-
-        return x
 
 class MobileNetv2_(nn.Module):
     '''
@@ -113,7 +81,7 @@ class MobileNetv2_(nn.Module):
                         (6, 320, 1, 1),]
 
         #112^2 * 32 bottleneck t=1, c=16, n=1, s=1
-        self.conv1 = InvResidualS1(in_channels=32, out_channels=16, t=1)
+        self.conv1 = InvertedResidual(in_channels=32, out_channels=16, t=1)
         
         #112^2 * 16 bottleneck t=6, c=24, n=2, s=2
         self.in_channels=16
