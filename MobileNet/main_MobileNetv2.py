@@ -6,22 +6,19 @@ from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 
 class ConvBlock(nn.Module):
-    def __init__(self, in_channels, out_channels, stride, first=False):
+    def __init__(self, first):
         super().__init__()
         if first:
-            in_channels=3, out_channels=32, kernel_size=3, stride=2, padding=1, bias=False
+            self.conv0 = nn.Sequential(nn.Conv2d(in_channels=3, out_channels=32, kernel_size=3, stride=2, padding=1, bias=False),
+                                                    nn.BatchNorm2d(32),
+                                                    nn.ReLU6(inplace=True),
+                                                    )
 
         else:
-            in_channels=320, out_channels=1280, kernel_size=1, stride=1, padding=0, bias=False
-
-        self.conv0 = nn.Sequential(nn.Conv2d(in_channels=in_channels, 
-                                                out_channels=out_channels, 
-                                                    kernel_size=kernel_size, 
-                                                        stride=stride, 
-                                                            padding=padding),
-                                   nn.BatchNorm2d(num_features=out_channels),
-                                   nn.ReLU6(inplace=True),
-                                   )
+            self.conv0 = nn.Sequential(nn.Conv2d(in_channels=320, out_channels=1280, kernel_size=1, stride=1, padding=0, bias=False),
+                                                    nn.BatchNorm2d(1280),
+                                                    nn.ReLU6(inplace=True),
+                                                    )
         
     def forward(self, x):
         x = self.conv0(x)
@@ -66,7 +63,7 @@ class MobileNetv2_(nn.Module):
     Docstring for MobileNetv2_
     Here t=expansion, c=out_channel, n=num_blocks, s=stride
     '''
-    def __init__(self, ):
+    def __init__(self, num_classes=10):
         super().__init__()
         #224^2 * 3 Conv2d t=-, c=32, n=1, s=2
         self.conv0 = ConvBlock(first=True)
@@ -79,21 +76,36 @@ class MobileNetv2_(nn.Module):
                         (6, 96, 3, 1),
                         (6, 160, 3, 2),
                         (6, 320, 1, 1),]
-
-        #112^2 * 32 bottleneck t=1, c=16, n=1, s=1
-        self.conv1 = InvertedResidual(in_channels=32, out_channels=16, t=1)
         
         #112^2 * 16 bottleneck t=6, c=24, n=2, s=2
-        self.in_channels=16
         self.features = nn.ModuleList()
+        self.in_channels=32
+
         for t,c,n,s in config:
             for i in range(n):
                 stride = s if i == 0 else 1
-                self.features.append(inv)
+                self.features.append(InvertedResidual(in_channels=self.in_channels, out_channels=c, stride=stride, t=t))
 
-        self.conv2 = nn.ModuleList
-        pass
+                self.in_channels = c
+        
+        self.conv1 = ConvBlock(first=False)
+
+        self.pool = nn.AdaptiveAvgPool2d(1)
+        self.dropout = nn.Dropout(0.2)
+        self.fc = nn.Linear(1280, num_classes)
 
     def forward(self, x):
+        x = self.conv0(x)
 
-        pass
+        for layer in self.features:
+            x = layer(x)
+
+        x = self.conv1(x)
+
+        x = self.pool(x)
+        x = torch.flatten(x, 1)
+
+        x = self.dropout(x)
+        x = self.fc(x)
+
+        return x
