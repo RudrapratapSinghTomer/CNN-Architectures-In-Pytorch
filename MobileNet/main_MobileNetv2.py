@@ -63,7 +63,7 @@ class MobileNetv2_(nn.Module):
     Docstring for MobileNetv2_
     Here t=expansion, c=out_channel, n=num_blocks, s=stride
     '''
-    def __init__(self, num_classes=10):
+    def __init__(self, num_classes=1000):
         super().__init__()
         #224^2 * 3 Conv2d t=-, c=32, n=1, s=2
         self.conv0 = ConvBlock(first=True)
